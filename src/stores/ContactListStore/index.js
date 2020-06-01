@@ -37,7 +37,9 @@ class ContactListStore {
       const response = await axios.post(CONTACTS);
 
       runInAction(() => {
-        this.data.push(new ContactModel(response.data.id, this));
+        const model = new ContactModel(response.data.id, this);
+        model.setEditMode(true);
+        this.data.push(model);
       });
 
       result = true;
