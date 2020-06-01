@@ -2,11 +2,11 @@
 
 ## Запуск
 
-### `npx json-server -p 3005 --watch <path_to db.json>`
+#### `npx json-server -p 3005 --watch <path_to db.json>`
 
-### `npm install`
+#### `npm install`
 
-### `npm start`
+#### `npm start`
 
 Логин: admin<br />
 Пароль: admin
