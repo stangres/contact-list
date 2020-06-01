@@ -5,6 +5,7 @@ import { createUrl } from '../../utils';
 
 export default class ContactItemModel {
   store;
+  editMode = false;
 
   id;
   nameItem = {
@@ -19,6 +20,10 @@ export default class ContactItemModel {
   constructor(id, store) {
     this.id = id;
     this.store = store;
+  }
+
+  setEditMode(mode) {
+    this.editMode = mode;
   }
 
   searchFunction(str, value) {
@@ -332,6 +337,8 @@ export default class ContactItemModel {
 }
 
 decorate(ContactItemModel, {
+  editMode: observable,
+  setEditMode: action,
   nameItem: observable,
   phones: observable,
   emails: observable,

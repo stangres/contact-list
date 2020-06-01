@@ -2,11 +2,14 @@
   &__item {
     overflow-wrap: anywhere;
   }
-  &__url {
-    margin-right: 20px;
 
+  &__url {
     &_editing a {
       color: white;
     }
+  }
+
+  &__tools {
+    margin-left: 20px;
   }
 }

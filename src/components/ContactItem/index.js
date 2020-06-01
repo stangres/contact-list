@@ -28,6 +28,10 @@ export default React.memo(({ model }) => {
     deleteContact(model.id);
   }
 
+  const setEditMode = () => {
+    model.setEditMode(!model.editMode);
+  }
+
   return useObserver(() => (
     <Card className={"contact-item"}
           fluid
@@ -49,13 +53,19 @@ export default React.memo(({ model }) => {
                 </div>
                 <div className={"contact-item__tools"}>
                   <Icon link
+                        name={"edit"}
+                        size={"small"}
+                        color={model.editMode ? 'blue' : null}
+                        onClick={setEditMode}
+                  />
+                  <Icon link
                         name={"refresh"}
-                        size={"tiny"}
+                        size={"small"}
                         onClick={refresh}
                   />
                   <Icon link
                         name={"delete"}
-                        size={"tiny"}
+                        size={"small"}
                         onClick={_deleteContact}
                   />
                 </div>

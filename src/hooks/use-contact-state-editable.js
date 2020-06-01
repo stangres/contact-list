@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { useContactState } from "../hooks";
 
 export default ({ submitCb,
@@ -8,7 +8,8 @@ export default ({ submitCb,
                   elementId,
                   dataIdKey,
                   dataValueKey,
-                  deleteCb
+                  deleteCb,
+                  editMode
                 }) => {
 
   const [editingData, setEditingData] = useState(null);
@@ -27,8 +28,17 @@ export default ({ submitCb,
     validateOnSubmit,
     clearOnSubmit,
     clearOnBlur,
-    elementId
+    elementId,
+    editMode
   });
+
+  useEffect(() => {
+      if (!editMode) {
+        setValue('');
+        setEditingData(null);
+      }
+    }, [editMode, setValue, setEditingData]
+  );
 
   function onChange(e) {
     setValue(e.target.value);

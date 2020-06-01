@@ -15,7 +15,8 @@ export default ({ submitCb,
                   validateOnSubmit,
                   clearOnSubmit,
                   clearOnBlur,
-                  elementId
+                  elementId,
+                  editMode
                 }) => {
 
   const inputElRef = useRef();
@@ -24,14 +25,20 @@ export default ({ submitCb,
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    //inputEl = document.getElementById(elementId);
     inputElRef.current = document.getElementById(elementId);
 
-    if (isActiveMode && inputElRef.current) {
+    if (editMode && isActiveMode && inputElRef.current) {
       inputElRef.current.focus();
       moveCursorToEnd(inputElRef.current);
     }
-  });
+  }, [editMode, isActiveMode, elementId]);
+
+  useEffect(() => {
+    if (!editMode) {
+      setError(false);
+      setIsActiveMode(false);
+    }
+  }, [editMode, setError, setIsActiveMode]);
 
   function onClick() {
     setError(false);

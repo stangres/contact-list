@@ -26,7 +26,8 @@ export default ({ model }) => {
     elementId,
     dataIdKey: 'id',
     dataValueKey: 'phone',
-    deleteCb: model.deletePhone
+    deleteCb: model.deletePhone,
+    editMode: model.editMode
   });
 
   function validateOnSubmit(value) {
@@ -52,27 +53,38 @@ export default ({ model }) => {
           >
             <Icon name={"phone"}/>
             <span className={"phone-container__phone"}>{item.phone}</span>
-            <Icon link
-                  name={"edit"}
-                  onClick={() => onEdit(item)}
-            />
-            <Icon link
-                  name={"delete"}
-                  onClick={() => onDelete(item)}
-            />
+            {model.editMode ?
+              <span className={"phone-container__tools"}>
+                <Icon link
+                     name={"edit"}
+                     onClick={() => onEdit(item)}
+                />
+                <Icon link
+                      name={"delete"}
+                      onClick={() => onDelete(item)}
+                />
+              </span>
+              :
+              null
+            }
           </Label>
         </Form.Field>))
       }
-      <Form.Field id={elementId}
-                  control={Input}
-                  name={"phone"}
-                  placeholder={"Телефон"}
-                  onClick={onClick}
-                  onBlur={onBlur}
-                  onChange={onChange}
-                  value={value}
-                  fluid
-      />
+      {model.editMode ?
+        <Form.Field id={elementId}
+                    control={Input}
+                    name={"phone"}
+                    placeholder={"Телефон"}
+                    onClick={onClick}
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    value={value}
+                    fluid
+        />
+        :
+        null
+      }
+
     </Form>
   ));
 };

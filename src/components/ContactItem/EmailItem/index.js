@@ -26,7 +26,8 @@ export default ({ model }) => {
     elementId,
     dataIdKey: 'id',
     dataValueKey: 'email',
-    deleteCb: model.deleteEmail
+    deleteCb: model.deleteEmail,
+    editMode: model.editMode
   });
 
   function validateOnSubmit(value) {
@@ -52,27 +53,37 @@ export default ({ model }) => {
           >
             <Icon name={"mail"}/>
             <span className={"email-container__email"}>{item.email}</span>
-            <Icon link
-                  name={"edit"}
-                  onClick={() => onEdit(item)}
-            />
-            <Icon link
-                  name={"delete"}
-                  onClick={() => onDelete(item)}
-            />
+            {model.editMode ?
+              <span className={"email-container__tools"}>
+                <Icon link
+                      name={"edit"}
+                      onClick={() => onEdit(item)}
+                />
+                <Icon link
+                      name={"delete"}
+                      onClick={() => onDelete(item)}
+                />
+              </span>
+              :
+              null
+            }
           </Label>
         </Form.Field>))
       }
-      <Form.Field id={elementId}
-                  control={Input}
-                  name={"email"}
-                  placeholder={"E-mail"}
-                  onClick={onClick}
-                  onBlur={onBlur}
-                  onChange={onChange}
-                  value={value}
-                  fluid
-      />
+      {model.editMode ?
+        <Form.Field id={elementId}
+                    control={Input}
+                    name={"email"}
+                    placeholder={"E-mail"}
+                    onClick={onClick}
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    value={value}
+                    fluid
+        />
+        :
+        null
+      }
     </Form>
   ));
 }
