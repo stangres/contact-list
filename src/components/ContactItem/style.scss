@@ -1,0 +1,47 @@
+.contact-item {
+    max-height: 500px;
+    overflow-y: auto;
+
+    &__loader {
+        height: 200px !important;
+
+        &.ui.loader:before, &.ui.loader:after {
+            top: 50%;
+            margin-top: -1.14285714rem;
+        }
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__name {
+        flex-grow: 1;
+    }
+
+    &__tools {
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.5s;
+    }
+
+    &:hover {
+        .contact-item__tools {
+            opacity: 1;
+            visibility: visible;
+            transition: 0.5s;
+        }
+    }
+
+    .form .field .input input {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-color: transparent;
+
+        &:focus {
+            border-color: rgba(34, 36, 38, 0.15);
+        }
+    }
+}

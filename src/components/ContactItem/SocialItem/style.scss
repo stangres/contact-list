@@ -1,0 +1,12 @@
+.social-net-container {
+  &__item {
+    overflow-wrap: anywhere;
+  }
+  &__url {
+    margin-right: 20px;
+
+    &_editing a {
+      color: white;
+    }
+  }
+}

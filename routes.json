@@ -1,0 +1,3 @@
+{
+  "/contacts/:contactId/names/:id": "/names/:id"
+}
