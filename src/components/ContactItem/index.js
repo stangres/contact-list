@@ -29,7 +29,7 @@ export default React.memo(({ model }) => {
   }
 
   const setEditMode = () => {
-    model.setEditMode(!model.editMode);
+    model.setEditMode(!model.isEditMode);
   }
 
   return useObserver(() => (
@@ -55,7 +55,7 @@ export default React.memo(({ model }) => {
                   <Icon link
                         name={"edit"}
                         size={"small"}
-                        color={model.editMode ? 'blue' : null}
+                        color={model.isEditMode ? 'blue' : null}
                         onClick={setEditMode}
                   />
                   <Icon link
