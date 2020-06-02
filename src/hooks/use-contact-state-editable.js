@@ -9,7 +9,7 @@ export default ({ submitCb,
                   dataIdKey,
                   dataValueKey,
                   deleteCb,
-                  editMode
+                  isEditMode
                 }) => {
 
   const [editingData, setEditingData] = useState(null);
@@ -29,15 +29,15 @@ export default ({ submitCb,
     clearOnSubmit,
     clearOnBlur,
     elementId,
-    editMode
+    isEditMode
   });
 
   useEffect(() => {
-      if (!editMode) {
+      if (!isEditMode) {
         setValue('');
         setEditingData(null);
       }
-    }, [editMode, setValue, setEditingData]
+    }, [isEditMode]
   );
 
   function onChange(e) {

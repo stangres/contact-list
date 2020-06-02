@@ -27,7 +27,7 @@ export default ({ model }) => {
     dataIdKey: 'id',
     dataValueKey: 'email',
     deleteCb: model.deleteEmail,
-    editMode: model.editMode
+    isEditMode: model.isEditMode
   });
 
   function validateOnSubmit(value) {
@@ -53,7 +53,7 @@ export default ({ model }) => {
           >
             <Icon name={"mail"}/>
             <span className={"email-container__email"}>{item.email}</span>
-            {model.editMode ?
+            {model.isEditMode ?
               <span className={"email-container__tools"}>
                 <Icon link
                       name={"edit"}
@@ -70,7 +70,7 @@ export default ({ model }) => {
           </Label>
         </Form.Field>))
       }
-      {model.editMode ?
+      {model.isEditMode ?
         <Form.Field id={elementId}
                     control={Input}
                     name={"email"}

@@ -16,7 +16,7 @@ export default ({ submitCb,
                   clearOnSubmit,
                   clearOnBlur,
                   elementId,
-                  editMode
+                  isEditMode
                 }) => {
 
   const inputElRef = useRef();
@@ -27,46 +27,53 @@ export default ({ submitCb,
   useEffect(() => {
     inputElRef.current = document.getElementById(elementId);
 
-    if (editMode && isActiveMode && inputElRef.current) {
+    if (isEditMode && isActiveMode && inputElRef.current) {
       inputElRef.current.focus();
       moveCursorToEnd(inputElRef.current);
     }
-  }, [editMode, isActiveMode, elementId]);
+  }, [isEditMode, isActiveMode, elementId]);
 
   useEffect(() => {
-    if (!editMode) {
+    if (!isEditMode) {
       setError(false);
       setIsActiveMode(false);
     }
-  }, [editMode, setError, setIsActiveMode]);
+  }, [isEditMode]);
 
   function onClick() {
-    setError(false);
-    setIsActiveMode(true);
+    if (isEditMode) {
+      setError(false);
+      setIsActiveMode(true);
+    }
   }
 
   function onBlur() {
-    if (clearOnBlur) {
-      inputElRef.current.value = '';
-    }
+    if (isEditMode) {
+      if (clearOnBlur) {
+        inputElRef.current.value = '';
+      }
 
-    setError(false);
-    setIsActiveMode(false);
+      setError(false);
+      setIsActiveMode(false);
+    }
   }
 
   async function onSubmit() {
     let result = false;
-    const value = inputElRef.current.value;
 
-    if (!validateOnSubmit || validateOnSubmit(value)) {
-      result = await submitCb(value);
-      setError(!result);
+    if (isEditMode) {
+      const value = inputElRef.current.value;
 
-      if (result) {
-        if (clearOnSubmit) {
-          inputElRef.current.value = '';
+      if (!validateOnSubmit || validateOnSubmit(value)) {
+        result = await submitCb(value);
+        setError(!result);
+
+        if (result) {
+          if (clearOnSubmit) {
+            inputElRef.current.value = '';
+          }
+          setIsActiveMode(false);
         }
-        setIsActiveMode(false);
       }
     }
 

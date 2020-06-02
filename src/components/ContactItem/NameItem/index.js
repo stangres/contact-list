@@ -19,7 +19,7 @@ export default ({ model }) => {
     submitCb: model.nameItem.id ? model.updateName : model.addName,
     validateOnSubmit,
     elementId,
-    editMode: model.editMode
+    isEditMode: model.isEditMode
   });
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default ({ model }) => {
 
   return useObserver(() => {
     return (
-      model.editMode && isActiveMode ?
+      model.isEditMode && isActiveMode ?
       <Form onSubmit={onSubmit}
             error={error}
       >
@@ -52,7 +52,7 @@ export default ({ model }) => {
       </Form>
       :
       <div className={"contact-item__text"}
-           onClick={model.editMode ? onClick : null}
+           onClick={model.isEditMode ? onClick : null}
       >
         <span>{model.nameItem.name}</span>
       </div>

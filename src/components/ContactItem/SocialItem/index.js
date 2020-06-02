@@ -54,7 +54,7 @@ export default ({ model }) => {
     dataIdKey: 'id',
     dataValueKey: 'url',
     deleteCb: model.deleteSocial,
-    editMode: model.editMode
+    isEditMode: model.isEditMode
   });
 
   function validateOnSubmit(value) {
@@ -93,7 +93,7 @@ export default ({ model }) => {
                   {snName}
                 </a>
               </span>
-              {model.editMode ?
+              {model.isEditMode ?
                 <span className={"social-net-container__tools"}>
                 <Icon link
                       name={"edit"}
@@ -112,7 +112,7 @@ export default ({ model }) => {
         )
         })
       }
-      {model.editMode ?
+      {model.isEditMode ?
         <Form.Field id={elementId}
                     control={Input}
                     name={"social"}
