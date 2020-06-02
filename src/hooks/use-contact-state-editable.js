@@ -12,13 +12,10 @@ export default ({ submitCb,
                   isEditMode
                 }) => {
 
-  const [editingData, setEditingData] = useState(null);
-  const [value, setValue] = useState('');
-
   const {
-    isActiveMode,
+    state: s,
     setIsActiveMode,
-    error,
+    //error,
     setError,
     onClick,
     onBlur,
@@ -32,13 +29,22 @@ export default ({ submitCb,
     isEditMode
   });
 
+  const [state, setState] = useState({ ...s, editingData: null, value: '' });
+
   useEffect(() => {
       if (!isEditMode) {
-        setValue('');
-        setEditingData(null);
+        setState(state => ({ ...state, editingData: null, value: '' }));
       }
     }, [isEditMode]
   );
+
+  function setEditingData(data) {
+    setState(state => ({ ...state, editingData: data }));
+  }
+
+  function setValue(value) {
+    setState(state => ({ ...state, value }));
+  }
 
   function onChange(e) {
     if (isEditMode) {
@@ -48,17 +54,18 @@ export default ({ submitCb,
 
   function onEdit(item) {
     if (isEditMode) {
-      setError(false);
+      let error = false,
+          value = '',
+          editingData = null,
+          isActiveMode = false;
 
-      if (editingData && editingData[dataIdKey] === item[dataIdKey]) {
-        setValue('');
-        setEditingData(null);
-        setIsActiveMode(false);
-      } else {
-        setValue(item[dataValueKey]);
-        setEditingData(item);
-        setIsActiveMode(true);
+      if (!state.editingData || state.editingData[dataIdKey] !== item[dataIdKey]) {
+        value = item[dataValueKey];
+        editingData = item;
+        isActiveMode = true;
       }
+
+      setState(state => ({ ...state, error, value, editingData, isActiveMode }));
     }
   }
 
@@ -67,36 +74,35 @@ export default ({ submitCb,
 
     if (isEditMode) {
       result = await deleteCb(item[dataIdKey]);
-      setError(!result);
+
+      let error = !result,
+          value = state.value,
+          editingData = state.editingData,
+          isActiveMode = state.isActiveMode;
 
       if (result && editingData && editingData[dataIdKey] === item[dataIdKey]) {
-        setValue('');
-        setEditingData(null);
-        setIsActiveMode(false);
+        value = '';
+        editingData = null;
+        isActiveMode = false;
       }
+
+      setState(state => ({ ...state, error, value, editingData, isActiveMode }));
     }
+
+    return result;
   }
 
   async function onSubmitInternal() {
     if (isEditMode) {
       if (await onSubmit()) {
-        setValue('');
-        setEditingData(null);
+        setState(state => ({ ...state, editingData: null, value: '' }));
       }
     }
   }
 
-  // function onBlurInternal() {
-  //   onBlur();
-  //   setValue('');
-  //   setEditingData(null);
-  // }
-
-
   return {
-    isActiveMode,
+    state,
     setIsActiveMode,
-    error,
     setError,
     onClick,
     onBlur,
@@ -105,9 +111,7 @@ export default ({ submitCb,
     onEdit,
     onDelete,
     onChange,
-    editingData,
     setEditingData,
-    value,
     setValue
   }
 }

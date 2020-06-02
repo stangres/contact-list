@@ -37,15 +37,13 @@ export default ({ model }) => {
   const elementId = "form-input-social-" + model.id;
 
   const {
-    error,
+    state,
     onClick,
     onBlur,
     onSubmit,
     onEdit,
     onDelete,
-    onChange,
-    editingData,
-    value
+    onChange
   } = useContactStateEditable({
     submitCb,
     validateOnSubmit,
@@ -58,23 +56,23 @@ export default ({ model }) => {
   });
 
   function validateOnSubmit(value) {
-    return value !== '' && (!editingData || editingData.url !== value) ;
+    return value !== '' && (!state.editingData || state.editingData.url !== value) ;
   }
 
   function submitCb(value) {
-    return editingData ? model.updateSocial(editingData.id, value) : model.addSocial(value);
+    return state.editingData ? model.updateSocial(state.editingData.id, value) : model.addSocial(value);
   }
 
   return useObserver(() => (
     <Form onSubmit={onSubmit}
           className={"social-net-container"}
-          error={error}
+          error={state.error}
     >
       <Message error
                content={errorMessage}
       />
       {model.socials.map(item => {
-        const isEditing = editingData && editingData.id === item.id;
+        const isEditing = state.editingData && state.editingData.id === item.id;
         const linkTextClass = isEditing ? " social-net-container__url_editing" : "";
 
         const snName = snByUrl(item.url);
@@ -120,7 +118,7 @@ export default ({ model }) => {
                     onClick={onClick}
                     onBlur={onBlur}
                     onChange={onChange}
-                    value={value}
+                    value={state.value}
                     fluid
         />
         :

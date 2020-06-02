@@ -10,15 +10,13 @@ export default ({ model }) => {
   const elementId = "form-input-email-" + model.id;
 
   const {
-    error,
+    state,
     onClick,
     onBlur,
     onSubmit,
     onEdit,
     onDelete,
-    onChange,
-    editingData,
-    value
+    onChange
   } = useContactStateEditable({
     submitCb,
     validateOnSubmit,
@@ -31,17 +29,17 @@ export default ({ model }) => {
   });
 
   function validateOnSubmit(value) {
-    return value !== '' && (!editingData || editingData.email !== value) ;
+    return value !== '' && (!state.editingData || state.editingData.email !== value) ;
   }
 
   function submitCb(value) {
-    return editingData ? model.updateEmail(editingData.id, value) : model.addEmail(value);
+    return state.editingData ? model.updateEmail(state.editingData.id, value) : model.addEmail(value);
   }
 
   return useObserver(() => (
     <Form onSubmit={onSubmit}
           className={"email-container"}
-          error={error}
+          error={state.error}
     >
       <Message error
                content={errorMessage}
@@ -49,7 +47,7 @@ export default ({ model }) => {
       {model.emails.map(item => (
         <Form.Field key={item.id}>
           <Label className={"email-container__item"}
-                 color={editingData && editingData.id === item.id ? "grey" : null}
+                 color={state.editingData && state.editingData.id === item.id ? "grey" : null}
           >
             <Icon name={"mail"}/>
             <span className={"email-container__email"}>{item.email}</span>
@@ -78,7 +76,7 @@ export default ({ model }) => {
                     onClick={onClick}
                     onBlur={onBlur}
                     onChange={onChange}
-                    value={value}
+                    value={state.value}
                     fluid
         />
         :

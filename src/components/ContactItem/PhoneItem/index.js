@@ -10,15 +10,13 @@ export default ({ model }) => {
   const elementId = "form-input-phone-" + model.id;
 
   const {
-    error,
+    state,
     onClick,
     onBlur,
     onSubmit,
     onEdit,
     onDelete,
-    onChange,
-    editingData,
-    value
+    onChange
   } = useContactStateEditable({
     submitCb,
     validateOnSubmit,
@@ -31,17 +29,17 @@ export default ({ model }) => {
   });
 
   function validateOnSubmit(value) {
-    return value !== '' && (!editingData || editingData.phone !== value) ;
+    return value !== '' && (!state.editingData || state.editingData.phone !== value) ;
   }
 
   function submitCb(value) {
-    return editingData ? model.updatePhone(editingData.id, value) : model.addPhone(value);
+    return state.editingData ? model.updatePhone(state.editingData.id, value) : model.addPhone(value);
   }
 
   return useObserver(() => (
     <Form onSubmit={onSubmit}
           className={"phone-container"}
-          error={error}
+          error={state.error}
     >
       <Message error
                content={errorMessage}
@@ -49,7 +47,7 @@ export default ({ model }) => {
       {model.phones.map(item => (
         <Form.Field key={item.id}>
           <Label className={"phone-container__item"}
-                 color={editingData && editingData.id === item.id ? "grey" : null}
+                 color={state.editingData && state.editingData.id === item.id ? "grey" : null}
           >
             <Icon name={"phone"}/>
             <span className={"phone-container__phone"}>{item.phone}</span>
@@ -78,7 +76,7 @@ export default ({ model }) => {
                     onClick={onClick}
                     onBlur={onBlur}
                     onChange={onChange}
-                    value={value}
+                    value={state.value}
                     fluid
         />
         :

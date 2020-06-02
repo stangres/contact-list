@@ -9,9 +9,8 @@ export default ({ model }) => {
   const elementId = "form-input-name-" + model.id;
 
   const {
-    isActiveMode,
+    state,
     setIsActiveMode,
-    error,
     onClick,
     onBlur,
     onSubmit
@@ -26,7 +25,7 @@ export default ({ model }) => {
     if (!model.nameItem.id) {
       setIsActiveMode(true);
     }
-  }, [model.nameItem.id, setIsActiveMode]);
+  }, [model.nameItem.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function validateOnSubmit(value) {
     return value !== '' && model.nameItem.name !== value;
@@ -34,9 +33,9 @@ export default ({ model }) => {
 
   return useObserver(() => {
     return (
-      model.isEditMode && isActiveMode ?
+      model.isEditMode && state.isActiveMode ?
       <Form onSubmit={onSubmit}
-            error={error}
+            error={state.error}
       >
         <Message error
                  content={errorMessage}

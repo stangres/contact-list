@@ -21,29 +21,34 @@ export default ({ submitCb,
 
   const inputElRef = useRef();
 
-  const [isActiveMode, setIsActiveMode] = useState(false);
-  const [error, setError] = useState(false);
+  const [state, setState] = useState({ isActiveMode: false, error: false });
 
   useEffect(() => {
     inputElRef.current = document.getElementById(elementId);
 
-    if (isEditMode && isActiveMode && inputElRef.current) {
+    if (isEditMode && state.isActiveMode && inputElRef.current) {
       inputElRef.current.focus();
       moveCursorToEnd(inputElRef.current);
     }
-  }, [isEditMode, isActiveMode, elementId]);
+  }, [isEditMode, state.isActiveMode, elementId]);
 
   useEffect(() => {
     if (!isEditMode) {
-      setError(false);
-      setIsActiveMode(false);
+      setState(state => ({ ...state, isActiveMode: false, error: false }));
     }
   }, [isEditMode]);
 
+  function setIsActiveMode(flag) {
+    setState(state => ({ ...state, isActiveMode: flag }));
+  }
+
+  function setError(flag) {
+    setState(state => ({ ...state, error: flag }));
+  }
+
   function onClick() {
     if (isEditMode) {
-      setError(false);
-      setIsActiveMode(true);
+      setState(state => ({ ...state, isActiveMode: true, error: false }));
     }
   }
 
@@ -53,8 +58,7 @@ export default ({ submitCb,
         inputElRef.current.value = '';
       }
 
-      setError(false);
-      setIsActiveMode(false);
+      setState(state => ({ ...state, isActiveMode: false, error: false }));
     }
   }
 
@@ -66,14 +70,19 @@ export default ({ submitCb,
 
       if (!validateOnSubmit || validateOnSubmit(value)) {
         result = await submitCb(value);
-        setError(!result);
+
+        let error = !result,
+            isActiveMode = state.isActiveMode;
 
         if (result) {
           if (clearOnSubmit) {
             inputElRef.current.value = '';
           }
-          setIsActiveMode(false);
+
+          isActiveMode = false;
         }
+
+        setState(state => ({ ...state, isActiveMode, error }));
       }
     }
 
@@ -81,12 +90,11 @@ export default ({ submitCb,
   }
 
   return {
-    isActiveMode,
+    state,
     setIsActiveMode,
-    error,
     setError,
     onClick,
     onBlur,
-    onSubmit,
+    onSubmit
   }
 }
