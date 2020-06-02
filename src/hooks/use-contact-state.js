@@ -1,16 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 
-const moveCursorToEnd = (el) => {
-  if (typeof el.selectionStart == "number") {
-    el.selectionStart = el.selectionEnd = el.value.length;
-  } else if (typeof el.createTextRange != "undefined") {
-    el.focus();
-    const range = el.createTextRange();
-    range.collapse(false);
-    range.select();
-  }
-}
-
 export default ({ submitCb,
                   validateOnSubmit,
                   clearOnSubmit,
@@ -28,7 +17,6 @@ export default ({ submitCb,
 
     if (isEditMode && state.isActiveMode && inputElRef.current) {
       inputElRef.current.focus();
-      moveCursorToEnd(inputElRef.current);
     }
   }, [isEditMode, state.isActiveMode, elementId]);
 
@@ -44,6 +32,10 @@ export default ({ submitCb,
 
   function setError(flag) {
     setState(state => ({ ...state, error: flag }));
+  }
+
+  function inputElementRef() {
+    return inputElRef;
   }
 
   function onClick() {
@@ -95,6 +87,7 @@ export default ({ submitCb,
     setError,
     onClick,
     onBlur,
-    onSubmit
+    onSubmit,
+    inputElementRef
   }
 }

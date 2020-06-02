@@ -1,6 +1,17 @@
 import {useEffect, useState} from "react";
 import { useContactState } from "../hooks";
 
+const moveCursorToEnd = (el) => {
+  if (typeof el.selectionStart == "number") {
+    el.selectionStart = el.selectionEnd = el.value.length;
+  } else if (typeof el.createTextRange != "undefined") {
+    el.focus();
+    const range = el.createTextRange();
+    range.collapse(false);
+    range.select();
+  }
+}
+
 export default ({ submitCb,
                   validateOnSubmit,
                   clearOnSubmit,
@@ -15,11 +26,11 @@ export default ({ submitCb,
   const {
     state: s,
     setIsActiveMode,
-    //error,
     setError,
     onClick,
     onBlur,
-    onSubmit
+    onSubmit,
+    inputElementRef
   } = useContactState({
     submitCb,
     validateOnSubmit,
@@ -59,13 +70,25 @@ export default ({ submitCb,
           editingData = null,
           isActiveMode = false;
 
+      let cursorToEnd = false;
+
       if (!state.editingData || state.editingData[dataIdKey] !== item[dataIdKey]) {
         value = item[dataValueKey];
         editingData = item;
         isActiveMode = true;
+        cursorToEnd = true;
       }
 
       setState(state => ({ ...state, error, value, editingData, isActiveMode }));
+
+      if (cursorToEnd) {
+        const inputElRef = inputElementRef();
+
+        if (inputElRef) {
+          inputElRef.current.focus();
+          moveCursorToEnd(inputElRef.current);
+        }
+      }
     }
   }
 
