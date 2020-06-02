@@ -52,7 +52,7 @@ export default ({ model }) => {
       </Form>
       :
       <div className={"contact-item__text"}
-           onClick={model.isEditMode ? onClick : null}
+           onClick={onClick}
       >
         <span>{model.nameItem.name}</span>
       </div>

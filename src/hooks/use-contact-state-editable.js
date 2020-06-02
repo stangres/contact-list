@@ -41,39 +41,48 @@ export default ({ submitCb,
   );
 
   function onChange(e) {
-    setValue(e.target.value);
+    if (isEditMode) {
+      setValue(e.target.value);
+    }
   }
 
   function onEdit(item) {
-    setError(false);
+    if (isEditMode) {
+      setError(false);
 
-    if (editingData && editingData[dataIdKey] === item[dataIdKey]) {
-      setValue('');
-      setEditingData(null);
-      setIsActiveMode(false);
-    }
-    else {
-      setValue(item[dataValueKey]);
-      setEditingData(item);
-      setIsActiveMode(true);
+      if (editingData && editingData[dataIdKey] === item[dataIdKey]) {
+        setValue('');
+        setEditingData(null);
+        setIsActiveMode(false);
+      } else {
+        setValue(item[dataValueKey]);
+        setEditingData(item);
+        setIsActiveMode(true);
+      }
     }
   }
 
   async function onDelete(item) {
-    const result = await deleteCb(item[dataIdKey]);
-    setError(!result);
+    let result = false;
 
-    if (result && editingData && editingData[dataIdKey] === item[dataIdKey]) {
-      setValue('');
-      setEditingData(null);
-      setIsActiveMode(false);
+    if (isEditMode) {
+      result = await deleteCb(item[dataIdKey]);
+      setError(!result);
+
+      if (result && editingData && editingData[dataIdKey] === item[dataIdKey]) {
+        setValue('');
+        setEditingData(null);
+        setIsActiveMode(false);
+      }
     }
   }
 
   async function onSubmitInternal() {
-    if (await onSubmit()) {
-      setValue('');
-      setEditingData(null);
+    if (isEditMode) {
+      if (await onSubmit()) {
+        setValue('');
+        setEditingData(null);
+      }
     }
   }
 
